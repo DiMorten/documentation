@@ -1,1 +1,669 @@
-asdf
+%==========================================
+%
+% Sibgrapi 2017 paper
+% Example of IEEEtran.cls, adapted for Sibgrapi 2017 
+%
+%==========================================
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+%\documentclass[10pt,conference]{IEEEtran}
+\documentclass[conference,a4paper]{IEEEtran}
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/pkg/ifpdf
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+   \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+   \graphicspath{{figs/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+   \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+   \usepackage[dvips, ruled]{graphicx}
+  % declare the path(s) where your graphic files are
+   \graphicspath{{../figs/}}Andres
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+   \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at: 
+% http://www.ctan.org/pkg/graphicx
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/pkg/epslatex
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+\usepackage{tikz}
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+% *** MATH PACKAGES ***
+%
+\usepackage[cmex10]{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+%
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+\usepackage{amsthm}
+\newtheorem{definition}{Definition}
+\usepackage{multirow}
+\usepackage{makecell}
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+% \usepackage{program}
+\usepackage[ruled]{algorithm2e}
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+\ifCLASSOPTIONcompsoc
+  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\else
+  \usepackage[caption=false,font=footnotesize]{subfig}
+\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a larger sans serif font
+% than the serif footnote size font used in traditional IEEE formatting
+% and thus the need to invoke different subfig.sty package options depending
+% on whether compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+\usepackage{amssymb}
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Multitemporal Crop Recognition from SAR Images Using Fully Convolutional and Recurrent Networks} 
+
+%------------------------------------------------------------------------- 
+% change the % on next lines to produce the final camera-ready version 
+\newif\iffinal
+%\finalfalse
+\finaltrue
+\newcommand{\jemsid}{94}
+%------------------------------------------------------------------------- 
+
+% author names and affiliations
+% use a multiple column layout for up to two different
+% affiliations
+
+\iffinal
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+% \author{\IEEEauthorblockN{Jose .D Bermudez Castro\IEEEauthorrefmark{1}, Raul Queiroz Feitosa\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}, Laura Cue la Rosa\IEEEauthorrefmark{1}, Pedro M. Anhanccaray Diaz\IEEEauthorrefmark{1}}
+% \IEEEauthorblockA{\IEEEauthorrefmark{1}Pontifical Catholic University of Rio de Janeiro, Brazil\\
+% \IEEEauthorrefmark{2}Rio de Janeiro State University, Brazil\\
+% %Pontifical Catholic University of Rio de Janeiro\\
+% %Rio de Janeiro, Brazil.\\
+% \{bermudez, raul, laura, pedro\}@ele.puc-rio.br}
+% \and
+% \IEEEauthorblockN{Laura Cue}
+% \IEEEauthorblockA{Twentieth Century Fox\\
+% Springfield, USA\\
+% Email: homer@thesimpsons.com}}
+% \and
+% \IEEEauthorblockN{Raul Queiroz\\ and Pedro Diaz}
+% \IEEEauthorblockA{Starfleet Academy\\
+% San Francisco, California 96678--2391\\
+% Telephone: (800) 555--1212\\
+% Fax: (888) 555--1212}}
+
+% conference papers do not typically use \thanks and this command
+% is locked out in conference mode. If really needed, such as for
+% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
+% after \documentclass
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+% 
+
+%\author{\IEEEauthorblockN{Jorge Andres Chamorro Martinez\IEEEauthorrefmark{1},
+%Raul Queiroz Feitosa\IEEEauthorrefmark{1}, Marco Aurelio Cavalcanti Pacheco\IEEEauthorrefmark{1},\\ Leonardo Alfredo Forero Mendoza\IEEEauthorrefmark{1}, Jose Bermudez Castro\IEEEauthorrefmark{1}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}Pontifical Catholic University of Rio de Janeiro, Brazil\\
+%Email: \{jchamorro, raul, marco, mendoza, bermudez\}@ele.puc-rio.br}
+%}
+
+%\author{\IEEEauthorblockN{Jorge Andres Chamorro Martinez\IEEEauthorrefmark{1}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}Pontifical Catholic University of Rio de Janeiro, Brazil\\
+%Email: jchamorro@ele.puc-rio.br}
+%}
+
+\else
+  \author{Sibgrapi paper ID: \jemsid \\ }
+\fi
+
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract
+\begin{abstract}
+
+Remote Sensing  data have been increasingly applied to assess agricultural yield, production and crop condition. These images can be obtained by different types of satellite sensors. Agricultural crop behavior can be modeled from a sequential multi-temporal perspective. Because of this, image data from previous months provides useful information for the crop type semantic segmentation task. In this context Deep Learning has emerged as a powerful technique for image sequence modeling using Convolutional LSTM (ConvLSTM) recurrent neural networks. This work presents a methodology for satellite image crop recognition using a ConvLSTM approach based on a sequence of multitemporal, multispectral images. To assess the usefulness of this model, its results are compared with a basic LSTM approach. Experiments were carried out in a dataset from Ipua municipality in the state of Sao Paulo, Brazil. It is shown that ConvLSTM is a useful tool for semantic segmentation task based on spatio-temporal information in terms of overall and average accuracy.
+\end{abstract}
+
+% keywords
+
+\begin{IEEEkeywords}
+Satellite image; Semantic segmentation; Convolutional LSTM.
+
+\end{IEEEkeywords}
+
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+\section{Introduction}
+
+
+The aim of this work is to compare different deep learning models 
+Comparison. Densenet but no weighted loss. LSTM but no comparison to other DL methods. Previous techniques like AE, CNN-PL,...
+
+When using multi-temporal image data for classification, a model that takes spatial and temporal dependencies into account is desired. Long short term memory (LSTM) models are known to be able to model temporal data. In the other hand, convolutional neural networks (CNN) are known to model spatial relationship between pixels from an image. As a  mixture of these models, convolutional LSTM networks (ConvLSTM) are able to model both spatial and temporal dependencies by replacing the LSTM’s original input, output and forget gate equations with convolutions \cite{convlstm}. This work implements a ConvLSTM-based neural network to address the problem of crop classification with multi-temporal satellite images. Its performance is evaluated in terms of overall and average accuracy metrics, as well as a comparison with a basic LSTM-based model.  
+
+The remainder of this paper is organized as follows: Section II explores related work. Section III briefly explains the theoretical fundamentals required to understand the model. Section IV explains the proposed methods including the dataset preparation method, proposed network architecture and the comparison strategies. Section V defines the experimental protocol. Then results are discussed in Section VI. Finally, conclusions are presented in Section VII.
+
+\section{Fundamentals}
+
+\subsection{Long Short Term Memory (FC-LSTM)}
+
+Recurrent neural networks (RNN) are a type of neural network designed for processing sequential data. These type of models are state-of-the-art in temporal modeling tasks\cite{ma2017ts}. In particular, LSTM are a special type of RNN that are capable of modeling both long and short term time dependencies. They feature two recurrent states $c_1,...c_t$ and $h_1,...h_t$ to store past information. Besides, they use an information gate to control how much information is added to the output state in each step and a forget gate to eliminate unuseful information. Input for this model is a sequence of vector data $x_1,...x_t$, and output is the $c_1,...c_t$ sequence. Equations for this model are as follows \cite{convlstm}, where "$\circ$" denotes the Hadamard product:
+\begin{align*}
+& i_t=\sigma (W_{xi}x_t+W_{hi} h_{t-1} + W_{ci}\circ c_{t-1}+b_i) \\
+& f_t=\sigma (W_{xf} x_t+W_{hf} h_{t-1} + W_{cf}\circ c_{t-1}+b_f) \\
+& C_t=f_t\circ C_{t-1}+i_t\circ tanh(W_{xc} x_t+W_{hc} h_{t-1}+b_c) \\
+& o_t=\sigma (W_{xo} x_t+W_{ho} h_{t-1} + W_{co} \circ c_{t}+b_o) \\
+& h_t=o_t\circ tanh(c_t)
+\end{align*}
+
+\subsection{Convolutional Long Short Term Memory (ConvLSTM)}
+
+A ConvLSTM takes the original LSTM cell and replaces the fully connected layers from the forget, information and output gates with convolutions. Input $\mathcal{X}_1,...\mathcal{X}_t$, hidden state $\mathcal{H}_1,...\mathcal{H}_t$ and output $\mathcal{C}_1,...\mathcal{C}_t$ are sequences of images (As opposed to flat vectors from LSTM). The desired amount of filters corresponds to the amount of image bands from $C_t$. Equations for the ConvLSTM cell are as follows \cite{convlstm}, where "$\ast$" denotes the convolution operator and "$\circ$" the Hadamart product:
+\begin{align*}
+& i_t=\sigma (W_{xi} \ast \mathcal{X}_t+W_{hi} \ast \mathcal{H}_{t-1} + W_{ci} \ast C_{t-1}+b_i) \\
+& f_t=\sigma (W_{xf} \ast \mathcal{X}_t+W_{hf} \ast \mathcal{H}_{t-1} + W_{cf} \ast C_{t-1}+b_f) \\
+& C_t=f_t\circ C_{t-1}+i_t\circ tanh(W_{xc} \ast \mathcal{X}_t+W_{hc} \ast \mathcal{H}_{t-1}+b_c) \\
+& o_t=\sigma (W_{xo} \ast \mathcal{X}_t+W_{ho} \ast \mathcal{H}_{t-1} + W_{co} \circ C_{t}+b_o) \\
+& \mathcal{H}_t=o_t\circ tanh(C_t)
+\end{align*}
+
+\section{Methods}
+
+This section describes the models evaluated in this work. Image stacking (IS) \cite{schneider2012monitoring,schneider2008compact} has been widely used for multitemporal crop recognition. Because of this, IS was used as the baseline model. Two recurrent network architectures were tested: LSTM-PC and ConvLSTM-PC. Finally, a Fully Convolutional Network for full patch labeling (FCN-PL) was implemented.
+
+
+
+((Multispectral satellite imagery is usually composed of an image containing the satellite's sensor information (e.g. Figure \ref{fig:rgb_im}) and a corresponding image containing the pixel-wise classes (e.g. Figure \ref{fig:labels}). For satellite image classification tasks, patch-based approaches have been used \cite{mnih2013machine,volpi2017dense}. For multitemporal images, a semantic segmentation has been performed on a given satellite image using a time sequence of past images from that location \cite{castro2017comparative}. In this work a sequential patch-based, pixel-wise dataset was created. Output for each sample corresponds to the class of certain pixel from the last sequence image. Input is a sequence of image patches centered around that specific pixel, with $(time, height, width, channels)$ shape.))
+
+
+\subsection{Image Stacking with Random Forest}
+
+This method consists of computing hand-crafted features for the images for each time step and stacking them all together, obtaining a feature vector from each pixel location. The resulting representation is then used to train a Random Forest classifier that assigns the class label probabilities for a given pixel. Particularly the values of correlation, homogeneity, mean and variance from GLCM matrix in four directions (0, 45, 90 and 135 degrees) using 5x5 windows were used as hand-crafted features. 
+\subsection{LSTM-PC}
+
+The model architecture is shown in Figure \ref{fig:baseline_model}. It receives a sequence of flattened image patches as inputs. First, the sequence is passed through a basic LSTM cell. Then the feature vector from the cell's last output is passed to a fully connected layer, followed by dropout and a softmax layer that produces the output class probabilities.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.35]{figs/baseline_rnn.eps}
+\caption{Block diagram for the baseline model. Input is a sequence of flattened images with dimensions $(time steps\times height\times width, channels)$. Then the last output from the LSTM is taken to a fully connected layer, and finally a softmax layer is applied.}
+\label{fig:baseline_model}
+\end{figure}
+
+\subsection{ConvLSTM-PC}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.35]{figs/model.eps}
+\caption{Block diagram for the proposed model. Input is an image sequence with dimensions $(time steps, height, width, channels)$. After the ConvLSTM cell, the sequence's last image is selected with dimensions $(height, width, channels)$ and taken to a fully connected layer, followed by a softmax output layer (ConvLSTM filters: 32).}
+\label{fig:proposed_model}
+\end{figure}
+
+ConvLSTM-PC architecture is shown in Figure \ref{fig:proposed_model}. It starts with a ConvLSTM cell, which input is a time sequence of multispectral patch images. Then after this cell, the sequence's last image is selected and flattened. The resulting vector is taken to a fully connected layer, followed by dropout and softmax output layers.
+
+\subsection{Fully Convolutional Network (FCN-PL)}
+
+The FCN-PL architecture takes an image as input and produces a correspondingly-sized output image with pixel-wise class probabilities, using a series of down-sampling followed by up-sampling layers \cite{long2015fully}. In this work, the architecture from \cite{iandola2014densenet} was used. This architecture uses skip connections to improve the flow of information and gradients throughout the network, allowing the use of larger models.
+
+\section{Experiments}
+\subsection{Datasets}
+
+Agricultural behaviour can greatly vary in different regions. Because of this, two study areas with very different weather conditions were studied: First one is located in the surroundings of Hanover city, in Germany. It has an extension of 1728 km2 and consists of a sequence of 24 pre-processed, dual-polarized SAR images from Sentinel-1. Because this is a temperate region, each parcel belongs to the same class throughout the entire year.
+
+Second area is located in Campo Verde municipality from the state of Mato Grosso, Brazil with an extension of 4782km2. It consists of a sequence of 14 SAR images taken from Sentinel-1 between October 2015 and July 2016. Main classes are soybean, maize and cotton. This area is located in a tropical/sub-tropical environment, making the multi-temporal behavior highly dynamic and challenging \cite{sanches2018campo}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.27]{figs/RGB_9.png}
+\caption{Last image from the time sequence. Study area: Ipua, Sao Paulo state, Brazil}
+\label{fig:rgb_im}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.22]{figs/ClassOccurrences_Ipua_New.eps}
+\caption{Class occurrences per image in Ipua dataset. In this work, last 6 images from the sequence were used.}
+\label{fig:labels}
+\end{figure}
+
+%scale 0.2
+%scale 0.19
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.195]{figs/im_label_rgb.png}
+\caption{Semantic label mask for the last timestamp. In order to  classify this image, information from previous timestamps was taken into account with the LSTM architectures (Colors from Fig. \ref{fig:labels}. Black area: Not used).}
+\label{fig:labels}
+\end{figure}
+
+%scale 0.42
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.42]{figs/mask.png}
+\caption{Train/test mask. Training set was obtained from the gray areas. Test set was taken from the white area. Black area was not used.}
+\label{fig:traintestmask}
+\end{figure}
+
+\subsection{Experimental Protocol}
+
+In order to assess the influence of multi-temporal information for crop recognition, the last image from a given sequence was classified using past information from all the corresponding images in that sequence. 
+
+For the IS model, random forest was used with scikit-learn. For the LSTM-PC model, 256... for the ConvLSTM-PC model, 16 filters... Finally, for the FCN-PL model, a grow rate of 16 and dense blocks with 2 layers were used. Random forest was implemented with sklearn; both LSTM-PC and ConvLSTM-PC were implemented with tensorflow and the FCN-PL implementation was made with Keras. Experiments were carried out in a i7, TITAN 6GB GPU.
+
+
+Early stopping with patience of 5 was used. Using a balancing algorithm,
+20000 samples per class were used for training (A total of 120000 samples). The test set consists of 390152 samples. Batch size was set to 200. Both baseline and proposed model's parameters were manually tuned. For the baseline model, the basic LSTM cell was implemented with 128 filters and the fully connected layer with 256 filters. The proposed model was implemented with 16 and 32 filters for the ConvLSTM cell, with 256 filters for the FC layer.
+
+Experiments were repeated 10 times each, and best performing values from the repetitions were considered. Models were implemented using tensorflow.
+
+\section{Results}
+
+Results show an improvement in all metrics for the implemented ConvLSTM model when compared against the baseline model. Metrics for both models are shown in Table \ref{tab:comparison}. Proposed model had a significant increase in average accuracy, and a slight increase in overall accuracy. The ConvLSTM cell managed to capture the dataset information with far less filters than the ones needed for the basic LSTM cell. On the other hand, the ConvLSTM cell with 16 filters had nearly the same amount of parameters than the BasicLSTM cell with 128 filters.
+
+
+\begin{table}[]
+\centering
+\caption{Test set metrics for basic LSTM cell with 128 filters and convolutional LSTM cell with 16 and 32 filters (All metrics are given in accuracy percentage except the last one).}
+\label{tab:comparison}
+\begin{tabular}{|l|l|l|l|}
+\hline
+Metric\textbackslash Model            & Basic LSTM & \begin{tabular}[c]{@{}l@{}}ConvLSTM\\ (16 filters)\end{tabular} & \begin{tabular}[c]{@{}l@{}}ConvLSTM\\ (32 filters)\end{tabular} \\ \hline
+Overall & 83.72      & 83.88                                                               & 84.38                                                           \\ \hline
+Average & 80.24      & 82.25                                                               & 82.31                                                           \\ \hline
+Sugarcane & 91.45      & 88.94                                                               & 89.88                                                           \\ \hline
+Pasture & 72.98      & 81.71                                                               & 81.61                                                           \\ \hline
+Forest  & 88.02      & 84.94                                                               & 86.65                                                           \\ \hline
+Post Harvest & 80.90      & 84.91                                                               & 84.56                                                           \\ \hline
+Soil & 81.07      & 81.05                                                               & 84.07                                                           \\ \hline
+Others & 67.05      & 71.96                                                               & 67.12                                                           \\ \hline
+Param. Count       & 164294     & 117510                                                              & 251654                                                          \\ \hline
+
+\end{tabular}
+\end{table}
+
+
+\section{Conclusions}
+
+Convolutional LSTM cells are specially adapted to working with sequences of images, and the ConvLSTM-based model produced higher evaluation metrics than its basic LSTM counterpart. Using as little as 16 filters for the ConvLSTM cell was enough to outperform the baseline model which had 128 filters on the recurrent layer. Thus, an advantage of ConvLSTM models for this type of problem is the reduced amount of filters required to model the data behavior. Finally, as opposed to a basic LSTM cell, using a ConvLSTM cell outputs an image (or sequence of images), allowing to add further architectures on top of this layer such as fully convolutional networks. Future works will be focused in image-to-image architectures using ConvLSTM cells.
+
+
+% conference papers do not normally have an appendix
+
+
+% use section* for acknowledgment
+% \section*{Acknowledgment}
+
+
+% The authors would like to thank...
+
+
+% From Figure~\ref{fig:sugarcane} and Figure~\ref{fig:corn}, it can be seen that there are improvements on the F1 measure of up to 76,4\% and 60,11\% for Sugarcane and Maize, respectively, when temporal information is considered. Notice the higher improvement on Maize than on Sugarcane, which is closely related to their F1 measure obtained by a monotemporal classification, where Sugarcane seems to be easier to discriminate than Maize due to the higher number of samples of it in each image. 
+
+% Results for sugarcane and maize crops sequence classification from Ipu\~{a} dataset are illustrated in Figure~\ref{fig:sugarcane} and Figure~\ref{fig:corn}, respectively. Results for other classes are also shown due to they are not relevant for the application's purpose. Each figure shows, for different sequence length, the F1-Score values obtained by the methods evaluated after classifying the last image in the sequence. From left to right in each bar group, each bar corresponds to monotemporal classification, the traditional approach, single date, multi date and CNNs, respectively, where monotemporal classification refers to the classification of each image separately using RF. This kind of comparison allow us to analyze the contribution of temporal information to the classification performance.
+%; however, this is not regularly increasing due to the lower number of samples in the other images (March and April), being Single layer CNNs the one with highest accuracy. 
+
+% Regarding results of approaches based on DL techniques with respect to the traditional approach, it can be observed that majors improvements in the performance metric, for maize, occurs primarily when only one image is considered in the sequence (first group of bars in Figure~\ref{fig:corn}); around 10\% to 15\%, while for longer sequences are close to 3\%. When the sequence length increases, there is still accuracy improvements of DL approaches over the baseline; however, this is not regularly increasing due to the lower number of samples in the other images (March and April), being Single layer CNNs the one with highest accuracy. 
+
+% the higher improvement on Sugarcane than on Maize, which is closely related to their F1 measure obtained by a monotemporal classification, where Sugarcane seems to be easier to discriminate than Maize due to the higher number of samples of it in each image. 
+% Regarding results of approaches based on DL techniques with respect to the baseline, it can be observed that majors improvements in the performance metric, for maize, occurs primarily when only one image is considered in the sequence (first group of bars in Figure~\ref{fig:corn}); around 10\% to 15\%, while for longer sequences are close to 3\%. When the sequence length increases, there is still accuracy improvements of DL approaches over the baseline; however, this is not regularly increasing due to the lower number of samples in the other images (March and April), being Single layer CNNs the one with highest accuracy.
+
+
+% An example of a floating figure using the graphicx package.
+% Note that \label must occur AFTER (or within) \caption.
+% For figures, \caption should occur after the \includegraphics.
+% Note that IEEEtran v1.7 and later has special internal code that
+% is designed to preserve the operation of \label within \caption
+% even when the captionsoff option is in effect. However, because
+% of issues like this, it may be the safest practice to put all your
+% \label just after \caption rather than within \caption{}.
+%
+% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
+% option should be used if it is desired that the figures are to be
+% displayed while in draft mode.
+%
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=2.5in]{sibgrapiSJC.png}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{SIBGRAPI - Conference on Graphics, Patterns and Images.}
+%\label{fig_sim}
+%\end{figure}
+
+% Note that the IEEE typically puts floats only at the top, even when this
+% results in a large percentage of a column being occupied by floats.
+
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+% The subfigure \label commands are set within each subfloat command,
+% and the \label for the overall figure must come after \caption.
+% \hfil is used as a separator to get equal spacing.
+% Watch out that the combined width of all the subfigures on a 
+% line do not exceed the text width or a line break will occur.
+%
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{figs/sibgrapiSJC.png}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{figs/sibgrapiSJC.png}%
+%\label{fig_second_case}}
+%\caption{SIBGRAPI - Conference on Graphics, Patterns and Images.}
+%\label{fig_sim2}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat[]), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
+% labels, the optional argument to \subfloat must be present. If a
+% subcaption is not desired, just leave its contents blank,
+% e.g., \subfloat[].
+
+
+% An example of a floating table. Note that, for IEEE style tables, the
+% \caption command should come BEFORE the table and, given that table
+% captions serve much like titles, are usually capitalized except for words
+% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
+% and up, which are usually not capitalized unless they are the first or
+% last word of the caption. Table text will default to \footnotesize as
+% the IEEE normally uses this smaller font for tables.
+% The \label must come after \caption as always.
+%
+% \begin{table}[]
+% %% increase table row spacing, adjust to taste
+% \renewcommand{\arraystretch}{1.3}
+% % if using array.sty, it might be a good idea to tweak the value of
+% % \extrarowheight as needed to properly center the text within the cells
+% \caption{An Example of a Table}
+% \label{table_example}
+% \centering
+% %% Some packages, such as MDW tools, offer better commands for making tables
+% %% than the plain LaTeX2e tabular which is used here.
+% \begin{tabular}{|c||c|}
+% \hline
+% One & Two\\
+% \hline
+% Three & Four\\
+% \hline
+% \end{tabular}
+% \end{table}
+
+
+% Note that the IEEE does not put floats in the very first column
+% - or typically anywhere on the first page for that matter. Also,
+% in-text middle ("here") positioning is typically not used, but it
+% is allowed and encouraged for Computer Society conferences (but
+% not Computer Society journals). Most IEEE journals/conferences use
+% top floats exclusively. 
+% Note that, LaTeX2e, unlike IEEE journals/conferences, places
+% footnotes above bottom floats. This can be corrected via the
+% \fnbelowfloat command of the stfloats package.
+
+
+
+
+
+
+
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{bibliography}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+%\begin{thebibliography}{1}
+%
+%\bibitem{IEEEhowto:kopka}
+%H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+%  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+%\end{thebibliography}
+
+
+
+
+% that's all folks
+\end{document}
+
+
