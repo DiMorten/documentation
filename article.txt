@@ -356,6 +356,36 @@ Satellite image; Semantic segmentation; Convolutional LSTM.
 \section{Introduction}
 
 
+In agriculture, precise and efficient information about the state of different crops can be used to develop commercial plans, regulate internal stocks and to perform customized management decisions based on varying soil types, landscape position and land usage history. In the last years, remote sensing imagery has increasingly been used for this task because it is a cost-efficient means for gathering timely, detailed and reliable information over large areas with short revisit periods \cite{thenkabail2015land,leite2011hidden}.
+
+The task of crop recognition is challenging because some fields are covered by different types of crops and such sequence could be governed by phenological, ecologic or economic reasons. Thus, agricultural areas are characterized by their typical spatial patterns and also by their temporal dynamics  \cite{lohmann2008multi,waske2009classifier}. 
+
+
+
+I On the other hand, deep learning models have significantly improved the state-of-the-art in multiple domains such as image, video, speech and audio \cite{lecun2015deep}. 
+
+For this type of images, multiple estimation methods have been proposed (...). 
+
+In the latest years, 
+
+
+
+
+
+Given these characteristics, both spatial and multi-temporal information have been used for the task of crop recognition \cite{mulla2013twenty}. 
+
+
+
+
+
+Agricultural crop recognitio
+. Particularly, the use of remote sensing imagery for this task has increasingly been used in the last few years because it is a cost-efficient means for gathering timely, detailed and reliable information over large areas with short revision periods. Due to these characteristics, remote sensing images provide
+
+
+(...). In order to perform crop recognition, Both spatial and temporal characteristics need to be taken into account. In this context, 
+
+has spatial and temporal dynamics 
+
 The aim of this work is to compare different deep learning models 
 Comparison. Densenet but no weighted loss. LSTM but no comparison to other DL methods. Previous techniques like AE, CNN-PL,...
 
@@ -389,12 +419,7 @@ A ConvLSTM takes the original LSTM cell and replaces the fully connected layers 
 
 \section{Methods}
 
-This section describes the models evaluated in this work. Image stacking (IS) \cite{schneider2012monitoring,schneider2008compact} has been widely used for multitemporal crop recognition. Because of this, IS was used as the baseline model. Two recurrent network architectures were tested: LSTM-PC and ConvLSTM-PC. Finally, a Fully Convolutional Network for full patch labeling (FCN-PL) was implemented.
-
-
-
-((Multispectral satellite imagery is usually composed of an image containing the satellite's sensor information (e.g. Figure \ref{fig:rgb_im}) and a corresponding image containing the pixel-wise classes (e.g. Figure \ref{fig:labels}). For satellite image classification tasks, patch-based approaches have been used \cite{mnih2013machine,volpi2017dense}. For multitemporal images, a semantic segmentation has been performed on a given satellite image using a time sequence of past images from that location \cite{castro2017comparative}. In this work a sequential patch-based, pixel-wise dataset was created. Output for each sample corresponds to the class of certain pixel from the last sequence image. Input is a sequence of image patches centered around that specific pixel, with $(time, height, width, channels)$ shape.))
-
+This section describes the models evaluated in this work. Image stacking (IS) \cite{schneider2012monitoring,schneider2008compact} has been widely used for multitemporal crop recognition. Because of this, IS was used as the baseline model. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
 
 \subsection{Image Stacking with Random Forest}
 
@@ -428,16 +453,11 @@ The FCN-PL architecture takes an image as input and produces a correspondingly-s
 \section{Experiments}
 \subsection{Datasets}
 
-Agricultural behaviour can greatly vary in different regions. Because of this, two study areas with very different weather conditions were studied: First one is located in the surroundings of Hanover city, in Germany. It has an extension of 1728 km2 and consists of a sequence of 24 pre-processed, dual-polarized SAR images from Sentinel-1. Because this is a temperate region, each parcel belongs to the same class throughout the entire year.
+Agricultural behaviour can greatly vary in different regions. Because of this, two study areas with very different weather conditions were studied: First one is located in the surroundings of Hanover city, in Germany (See Figure \ref{}). It has an extension of 1728 km2 and consists of a sequence of 24 pre-processed, dual-polarized Sentinel-1 SAR images taken from from October 2014 to October 2016 in a monthly basis. Because this is a temperate region, each parcel belongs to the same class throughout the entire year. Most common crop types are Sugarcane, Soybean and Maize. 
 
-Second area is located in Campo Verde municipality from the state of Mato Grosso, Brazil with an extension of 4782km2. It consists of a sequence of 14 SAR images taken from Sentinel-1 between October 2015 and July 2016. Main classes are soybean, maize and cotton. This area is located in a tropical/sub-tropical environment, making the multi-temporal behavior highly dynamic and challenging \cite{sanches2018campo}.
+Second area is located in Campo Verde municipality from the state of Mato Grosso, Brazil with an extension of 4782km2 (See Figure \ref{}. It consists of a sequence of 14 SAR images taken from Sentinel-1 in VV and VH polarizations between October 2015 and July 2016. Main classes are soybean, maize and cotton. This area is located in a tropical environment, making its multi-temporal behavior highly dynamic and challenging. \cite{sanches2018campo}.
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.27]{figs/RGB_9.png}
-\caption{Last image from the time sequence. Study area: Ipua, Sao Paulo state, Brazil}
-\label{fig:rgb_im}
-\end{figure}
+
 
 \begin{figure}[h]
 \centering
@@ -446,14 +466,7 @@ Second area is located in Campo Verde municipality from the state of Mato Grosso
 \label{fig:labels}
 \end{figure}
 
-%scale 0.2
-%scale 0.19
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.195]{figs/im_label_rgb.png}
-\caption{Semantic label mask for the last timestamp. In order to  classify this image, information from previous timestamps was taken into account with the LSTM architectures (Colors from Fig. \ref{fig:labels}. Black area: Not used).}
-\label{fig:labels}
-\end{figure}
+
 
 %scale 0.42
 \begin{figure}[h]
