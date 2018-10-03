@@ -354,13 +354,15 @@ Satellite image; Semantic segmentation; Convolutional LSTM.
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 \section{Introduction}
+Agriculture must strongly increase its production to feed the nine-billion people predicted by mid-century, while minimizing its enviromental impact. In this context, precise and efficient information about the state of different crops can be used to develop commercial plans, regulate internal stocks and to perform customized management decisions based on varying soil types, landscape position and land usage history. In the last years, remote sensing imagery has increasingly been used for this task because it is a cost-efficient means for gathering timely, detailed and reliable information over large areas with short revisit periods \cite{thenkabail2015land,leite2011hidden}.
+
+Crop recognition is challenging because some fields are covered with different types of crops during the year and such sequence could be governed by phenological, ecologic or economic reasons. Thus, agricultural areas are characterized by their temporal dynamics and also by their typical spatial patterns \cite{lohmann2008multi,waske2009classifier}. 
+
+A commonly used method consists of stacking the multi-temporal sequence of images together and train a classifier such as RF or SVM using information from the individual pixels. This approach has the disadvantage that it ignores spatial context. Object-based approaches perform segmentation on the input data and classify the resulting segments. Although segmentation considers the image's spatial context, it only takes into account the input data and ignores the semantic information. Probabilistic graphical such as Conditional Random Fields are able to capture spatio-temporal context and have been used for crop recognition \cite{achanccaray2017spatial}, although it still requires features to be manually extracted. In recent years, deep learning models have made breakthroughs in several fields such as speech recognition and medical image processing. In the field of remote sensing, deep learning models have become a new way to solve old problems and have achieved state-of-the-art in multiple applications \cite{ji20183d, cr}. In particular, recurrent networks are designed to model temporal data while convolutional networks are useful for understanding spatial context. In \cite{jose}, recurrent and convolutional networks were successfully applied to crop recognition. Likewise, fully convolutional networks have became state-of-the-art in semantic segmentation tasks while improving computational efficiency at test time \cite{laura}.
 
 
-In agriculture, precise and efficient information about the state of different crops can be used to develop commercial plans, regulate internal stocks and to perform customized management decisions based on varying soil types, landscape position and land usage history. In the last years, remote sensing imagery has increasingly been used for this task because it is a cost-efficient means for gathering timely, detailed and reliable information over large areas with short revisit periods \cite{thenkabail2015land,leite2011hidden}.
 
-The task of crop recognition is challenging because some fields are covered by different types of crops and such sequence could be governed by phenological, ecologic or economic reasons. Thus, agricultural areas are characterized by their typical spatial patterns and also by their temporal dynamics  \cite{lohmann2008multi,waske2009classifier}. 
-
-
+Methods use
 
 I On the other hand, deep learning models have significantly improved the state-of-the-art in multiple domains such as image, video, speech and audio \cite{lecun2015deep}. 
 
@@ -417,16 +419,16 @@ A ConvLSTM takes the original LSTM cell and replaces the fully connected layers 
 & \mathcal{H}_t=o_t\circ tanh(C_t)
 \end{align*}
 
-\section{Methods}
+\section{Models}
 
-This section describes the models evaluated in this work. Image stacking (IS) \cite{schneider2012monitoring,schneider2008compact} has been widely used for multitemporal crop recognition. Because of this, IS was used as the baseline model. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
+This section describes the models evaluated during this work. Image stacking (IS) has been widely used for multitemporal crop recognition \cite{schneider2012monitoring,schneider2008compact}. Because of this, IS was used as the baseline model. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. These two architectures output a single classification for the entire patch. Then at inference time, the predicted value is assigned to the center pixel position from the corresponding input. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
 
 \subsection{Image Stacking with Random Forest}
 
 This method consists of computing hand-crafted features for the images for each time step and stacking them all together, obtaining a feature vector from each pixel location. The resulting representation is then used to train a Random Forest classifier that assigns the class label probabilities for a given pixel. Particularly the values of correlation, homogeneity, mean and variance from GLCM matrix in four directions (0, 45, 90 and 135 degrees) using 5x5 windows were used as hand-crafted features. 
 \subsection{LSTM-PC}
 
-The model architecture is shown in Figure \ref{fig:baseline_model}. It receives a sequence of flattened image patches as inputs. First, the sequence is passed through a basic LSTM cell. Then the feature vector from the cell's last output is passed to a fully connected layer, followed by dropout and a softmax layer that produces the output class probabilities.
+The model architecture is shown in Figure \ref{fig:baseline_model}. It receives a sequence of flattened image patches as inputs. First, the sequence is passed through a basic LSTM cell. Then the feature vector from the cell's last output is passed to a fully connected layer, followed by a softmax layer producing the output class probabilities. 
 
 \begin{figure}[h]
 \centering
@@ -444,51 +446,45 @@ The model architecture is shown in Figure \ref{fig:baseline_model}. It receives 
 \label{fig:proposed_model}
 \end{figure}
 
-ConvLSTM-PC architecture is shown in Figure \ref{fig:proposed_model}. It starts with a ConvLSTM cell, which input is a time sequence of multispectral patch images. Then after this cell, the sequence's last image is selected and flattened. The resulting vector is taken to a fully connected layer, followed by dropout and softmax output layers.
+ConvLSTM-PC architecture is shown in Figure \ref{fig:proposed_model}. It begins with a ConvLSTM cell, which takes a time sequence of multi-spectral patch images as input. After this cell, the sequence's last image is selected and flattened. The resulting vector is taken to a fully connected layer by a softmax layer which produces the final class probabilities. 
 
 \subsection{Fully Convolutional Network (FCN-PL)}
 
-The FCN-PL architecture takes an image as input and produces a correspondingly-sized output image with pixel-wise class probabilities, using a series of down-sampling followed by up-sampling layers \cite{long2015fully}. In this work, the architecture from \cite{iandola2014densenet} was used. This architecture uses skip connections to improve the flow of information and gradients throughout the network, allowing the use of larger models.
+The FCN-PL architecture takes an image as input and produces an output of the same size with class probabilities for every pixel, using a series of down-sampling followed by up-sampling layers \cite{long2015fully}. In this work, the DenseNet architecture from \cite{iandola2014densenet} was used. This architecture uses skip connections to improve the flow of information and gradients throughout the network, allowing the use of larger models.
 
 \section{Experiments}
 \subsection{Datasets}
 
-Agricultural behaviour can greatly vary in different regions. Because of this, two study areas with very different weather conditions were studied: First one is located in the surroundings of Hanover city, in Germany (See Figure \ref{}). It has an extension of 1728 km2 and consists of a sequence of 24 pre-processed, dual-polarized Sentinel-1 SAR images taken from from October 2014 to October 2016 in a monthly basis. Because this is a temperate region, each parcel belongs to the same class throughout the entire year. Most common crop types are Sugarcane, Soybean and Maize. 
+Agricultural behaviour can greatly vary in different regions. Because of this, two areas with very different weather conditions were studied: First one is located in the surroundings of Hanover city, in Germany (Figure \cite{}). It has an extension of 1728 km2 and consists of a sequence of 24 pre-processed, dual-polarized Sentinel-1 SAR images taken from from October 2014 to October 2016 in a monthly basis. Because this is a temperate region, each parcel belongs to the same class throughout the entire year. Most common crop types are Sugarcane, Soybean and Maize \cite{bargiel2017new}.
 
-Second area is located in Campo Verde municipality from the state of Mato Grosso, Brazil with an extension of 4782km2 (See Figure \ref{}. It consists of a sequence of 14 SAR images taken from Sentinel-1 in VV and VH polarizations between October 2015 and July 2016. Main classes are soybean, maize and cotton. This area is located in a tropical environment, making its multi-temporal behavior highly dynamic and challenging. \cite{sanches2018campo}.
+Second area is located in Campo Verde municipality from the state of Mato Grosso, Brazil with an extension of 4782km2 (Figure \ref{}). It consists of a sequence of 14 pre-processed, dual-polarized SAR images taken from Sentinel-1 between October 2015 and July 2016. Main classes are soybean, maize and cotton. This area is located in a tropical environment, making its multi-temporal behavior highly dynamic and challenging \cite{sanches2018campo}.
 
 
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.22]{figs/ClassOccurrences_Ipua_New.eps}
-\caption{Class occurrences per image in Ipua dataset. In this work, last 6 images from the sequence were used.}
+\includegraphics[scale=0.22]{figs2/ClassOccurrencesUnique.eps}
+\caption{Class occurences from Campo Verde dataset. Two main sub-sequences were identified: First one mainly contains Soybean, while the second one contains Maize and Cotton.}
 \label{fig:labels}
 \end{figure}
 
 
-
-%scale 0.42
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.42]{figs/mask.png}
-\caption{Train/test mask. Training set was obtained from the gray areas. Test set was taken from the white area. Black area was not used.}
-\label{fig:traintestmask}
-\end{figure}
-
 \subsection{Experimental Protocol}
 
-In order to assess the influence of multi-temporal information for crop recognition, the last image from a given sequence was classified using past information from all the corresponding images in that sequence. 
+In order to assess the influence of multi-temporal information for crop recognition, the last image from a given sequence was classified using past information from all the corresponding images in the sequence. 
 
-For the IS model, random forest was used with scikit-learn. For the LSTM-PC model, 256... for the ConvLSTM-PC model, 16 filters... Finally, for the FCN-PL model, a grow rate of 16 and dense blocks with 2 layers were used. Random forest was implemented with sklearn; both LSTM-PC and ConvLSTM-PC were implemented with tensorflow and the FCN-PL implementation was made with Keras. Experiments were carried out in a i7, TITAN 6GB GPU.
+In each of the studied areas, 50\% of the labeled data was used for training and the remaining 50\% for testing. Standard normalization was applied to the input images. In the case of Campo Verde database, two main sequences were separately studied due to their differences in crop distribution, which can be observed in Figure \ref{}. Sequence 1 consists of images taken from October 2015 to February 2016, while sequence 2 goes from March 2016 to July 2016. 
 
+For the patch classification networks LSTM-PC and ConvLSTM-PC, the required amount of spatial information differed between the studied areas because of their specific crop parcel sizes. Input image size was 15x15 and 5x5 for Campo Verde and Hanover respectively. In the case of LSTM-PC, 100 filters were used for the recurrent network. In the fully connected network, 100 filters were used for Campo Verde and 300 for Hanover. Likewise, in ConvLSTM-PC the convolutional stage had 16 filters. Then the fully connected layer was configured with 100 filters for Campo Verde and 300 for Hanover. In the case of Hanover dataset, max-pooling was not applied due to its small input size. For FCN-PL, patches of size 32x32 were used as input. The DenseNet architecture was configured with a growth rate of 16 and a dropout of 0.2. Random forest for the IS model was trained with 250 trees and a maximum depth of 25.
 
-Early stopping with patience of 5 was used. Using a balancing algorithm,
-20000 samples per class were used for training (A total of 120000 samples). The test set consists of 390152 samples. Batch size was set to 200. Both baseline and proposed model's parameters were manually tuned. For the baseline model, the basic LSTM cell was implemented with 128 filters and the fully connected layer with 256 filters. The proposed model was implemented with 16 and 32 filters for the ConvLSTM cell, with 256 filters for the FC layer.
-
-Experiments were repeated 10 times each, and best performing values from the repetitions were considered. Models were implemented using tensorflow.
+Data balancing was performed with random replication from the smaller classes. Training was made with early stopping regularization. Adam optimizer with learning rate of 0.001 was used for the recurrent networks and Adagrad with 0.01 learning rate for FCN-PL.  
 
 \section{Results}
+
+
+\section{Conclusions}
+
+
 
 Results show an improvement in all metrics for the implemented ConvLSTM model when compared against the baseline model. Metrics for both models are shown in Table \ref{tab:comparison}. Proposed model had a significant increase in average accuracy, and a slight increase in overall accuracy. The ConvLSTM cell managed to capture the dataset information with far less filters than the ones needed for the basic LSTM cell. On the other hand, the ConvLSTM cell with 16 filters had nearly the same amount of parameters than the BasicLSTM cell with 128 filters.
 
