@@ -271,7 +271,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Multitemporal Crop Recognition from SAR Images Using Fully Convolutional and Recurrent Networks} 
+\title{A Comparison of Convolutional and Recurrent Networks for Multi-temporal Crop Recognition From SAR Images} 
 
 %------------------------------------------------------------------------- 
 % change the % on next lines to produce the final camera-ready version 
@@ -346,7 +346,7 @@ Remote Sensing  data have been increasingly applied to assess agricultural yield
 % keywords
 
 \begin{IEEEkeywords}
-Satellite image; Semantic segmentation; Convolutional LSTM.
+Synthetic Aperture Radar; Semantic segmentation; Fully Convolutional Networks; Recurrent Networks.
 
 \end{IEEEkeywords}
 
@@ -360,13 +360,13 @@ Crop recognition is challenging because some fields are covered with different t
 
 A commonly used method consists of stacking the multi-temporal sequence of images together and train a classifier such as RF or SVM using information from the individual pixels. This approach has the disadvantage that it ignores spatial context. Object-based approaches perform segmentation on the input data and classify the resulting segments. Although segmentation considers the image's spatial context, it only takes into account the input data and ignores the semantic information. Probabilistic graphical such as Conditional Random Fields are able to capture spatio-temporal context and have been used for crop recognition \cite{achanccaray2017spatial}, although it still requires features to be manually extracted. In recent years, deep learning models have made breakthroughs in several fields such as speech recognition and computer vision. In the field of remote sensing, deep learning models have become a new way to solve old problems and have achieved state-of-the-art in multiple applications \cite{audebertdeep}. In particular, recurrent networks are designed to model temporal data while convolutional networks are useful for understanding spatial context. In \cite{jose}, recurrent and convolutional networks were successfully applied to crop recognition. Likewise, fully convolutional networks (FCN) have became state-of-the-art in semantic segmentation tasks while improving inference time \cite{long2015fully}. In \cite{} a FCN was applied for the multi-temporal crop recognition task. In \cite{castro2017comparative} CNNs were also applied to this problem. 
 
-As a  mixture of these models, convolutional LSTM networks (ConvLSTM) are able to model both spatial and temporal dependencies by replacing the LSTM original input, output and forget gate equations with convolutions \cite{xingjian2015convolutional}. This work compares different deep learning architectures based in recurrent and fully convolutional networks, and proposes a ConvLSTM-based network for the problem of multi-temporal crop recognition. Models were evaluated using two study areas with very different weather conditions: First one is located in Hanover, Germany with a template climate. The second area corresponds to a sub-tropical region in Campo Verde municipality, Brazil.
+As a  combination of previous ideas, convolutional LSTM networks (ConvLSTM) are able to model both spatial and temporal dependencies by replacing the LSTM input-to-state and state-to-state layers with convolutions \cite{xingjian2015convolutional}. This work compares different deep learning architectures based in recurrent and fully convolutional networks, and proposes a ConvLSTM-based network for the problem of multi-temporal crop recognition. Models were evaluated using two study areas with very different weather conditions: First one is located in Hanover, Germany with a template climate. The second area corresponds to a sub-tropical region in Campo Verde municipality, Brazil.
 
-The remainder of this paper is organized as follows: Section II explores related work. Section III briefly explains the theoretical fundamentals required to understand the model. Section IV explains the proposed methods including the dataset preparation method, proposed network architecture and the comparison strategies. Section V defines the experimental protocol. Then results are discussed in Section VI. Finally, conclusions are presented in Section VII.
+The remainder of this paper is organized as follows: Section II briefly explains the theoretical fundamentals to understand the models. Section III shows the used model architectures. In section IV, the study areas and the experimental protocol are discussed. Then results are discussed in Section V. Finally, conclusions are presented in Section VI.
 
 \section{Fundamentals}
 
-\subsection{Long Short Term Memory (FC-LSTM)}
+\subsection{Long Short Term Memory (LSTM)}
 
 Recurrent neural networks (RNN) are a type of neural network designed for processing sequential data. These type of models are state-of-the-art in temporal modeling tasks\cite{ma2017ts}. In particular, LSTM are a special type of RNN that are capable of modeling both long and short term time dependencies. They feature two recurrent states $c_1,...c_t$ and $h_1,...h_t$ to store past information. Besides, they use an information gate to control how much information is added to the output state in each step and a forget gate to eliminate unuseful information. Input for this model is a sequence of vector data $x_1,...x_t$, and output is the $c_1,...c_t$ sequence. Equations for this model are as follows \cite{convlstm}, where "$\circ$" denotes the Hadamard product:
 \begin{align*}
@@ -377,9 +377,16 @@ Recurrent neural networks (RNN) are a type of neural network designed for proces
 & h_t=o_t\circ tanh(c_t)
 \end{align*}
 
+%\begin{figure}[t!]
+%\centering
+%\includegraphics[scale=0.35]{figs/baseline_rnn.eps}
+%\caption{Block diagram for the baseline model. Input is a sequence of flattened images with dimensions $(time steps\times height\times width, channels)$. Then the last output from the LSTM is taken to a fully connected layer, and finally a softmax layer is applied.}
+%\label{fig:baseline_model}
+%\end{figure}
+%\subsection{ConvLSTM-PC}
 \subsection{Convolutional Long Short Term Memory (ConvLSTM)}
 
-A ConvLSTM takes the original LSTM cell and replaces the fully connected layers from the forget, information and output gates with convolutions. Input $\mathcal{X}_1,...\mathcal{X}_t$, hidden state $\mathcal{H}_1,...\mathcal{H}_t$ and output $\mathcal{C}_1,...\mathcal{C}_t$ are sequences of images (As opposed to flat vectors from LSTM). The desired amount of filters corresponds to the amount of image bands from $C_t$. Equations for the ConvLSTM cell are as follows \cite{convlstm}, where "$\ast$" denotes the convolution operator and "$\circ$" the Hadamart product:
+A major drawback from the original LSTM in handling spatial data is the usage of fully connected layers for its input-to-state and state-to-state transitions, which don't take spatial context into account. A ConvLSTM cell takes the original LSTM cell and replaces the fully connected layers from the forget, information and output gates with convolutions. Input $\mathcal{X}_1,...\mathcal{X}_t$, hidden state $\mathcal{H}_1,...\mathcal{H}_t$ and output $\mathcal{C}_1,...\mathcal{C}_t$ are sequences of images (As opposed to flat vectors from LSTM). The desired amount of filters corresponds to the amount of image bands from $C_t$. Equations for the ConvLSTM cell are as follows \cite{convlstm}, where "$\ast$" denotes the convolution operator and "$\circ$" the Hadamart product:
 \begin{align*}
 & i_t=\sigma (W_{xi} \ast \mathcal{X}_t+W_{hi} \ast \mathcal{H}_{t-1} + W_{ci} \ast C_{t-1}+b_i) \\
 & f_t=\sigma (W_{xf} \ast \mathcal{X}_t+W_{hf} \ast \mathcal{H}_{t-1} + W_{cf} \ast C_{t-1}+b_f) \\
@@ -388,49 +395,93 @@ A ConvLSTM takes the original LSTM cell and replaces the fully connected layers 
 & \mathcal{H}_t=o_t\circ tanh(C_t)
 \end{align*}
 
-\section{Model Architecture}
+\section{Models}
 
-This section describes the models evaluated during this work. Image stacking has been widely used for multitemporal crop recognition \cite{schneider2012monitoring,schneider2008compact}. Because of this, it was used as the baseline model with a Random Forest classifier. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. These two architectures output a single classification for the entire patch. Then at inference time, the predicted value is assigned to the center pixel position from the corresponding input. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
+This section describes the models evaluated during this work. Image stacking has been widely used for multitemporal crop recognition \cite{schneider2012monitoring,schneider2008compact}. Because of this, it was used as the baseline model with a Random Forest classifier. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
 
 \subsection{Image Stacking with Random Forest}
 
 This method consists of computing hand-crafted features for the images for each time step and stacking them all together, obtaining a feature vector from each pixel location. The resulting representation is then used to train a Random Forest classifier that assigns the class label probabilities for a given pixel. Particularly the values of correlation, homogeneity, mean and variance from GLCM matrix in four directions (0, 45, 90 and 135 degrees) using 5x5 windows were used as hand-crafted features. 
 \subsection{LSTM-PC}
 
-The model architecture is shown in Figure \ref{fig:baseline_model}. It receives a sequence of flattened image patches as inputs. First, the sequence is passed through a basic LSTM cell. Then the feature vector from the cell's last output is passed to a fully connected layer, followed by a softmax layer producing the output class probabilities. 
 
-\begin{figure}[h]
+\begin{table}[]
 \centering
-\includegraphics[scale=0.35]{figs/baseline_rnn.eps}
-\caption{Block diagram for the baseline model. Input is a sequence of flattened images with dimensions $(time steps\times height\times width, channels)$. Then the last output from the LSTM is taken to a fully connected layer, and finally a softmax layer is applied.}
-\label{fig:baseline_model}
-\end{figure}
+\caption{My caption}
+\label{my-label}
+\begin{tabular}{|c|c|c|}
+\hline
+ & \textbf{Campo Verde} & \textbf{Hanover} \\ \hline
+\textbf{Layer} & \textbf{Size-Out} & \textbf{Size-Out} \\ \hline
+\textbf{LSTM} & 100 & 100 \\ \hline
+\textbf{Dense} & 100 & 300 \\ \hline
+\textbf{Softmax} & 9 or 10 & 8 \\ \hline
+\end{tabular}
+\end{table}
+
+The model architecture is shown in Figure \ref{fig:baseline_model}. It receives a sequence of flattened image patches as inputs. First, the sequence is passed through a basic LSTM cell. Then the feature vector from the cell's last output is passed to a fully connected layer, followed by a softmax layer producing the output class probabilities. At inference time, the model is applied to overlapping patches and the predicted class is assigned to the central pixel from the input patch. Then a mosaic is constructed by spatially concatenating the classification results.
+
+
+
+
+
+
+%\begin{figure}[t!]
+%\centering
+%\includegraphics[scale=0.35]{figs/model.eps}
+%\caption{Block diagram for the proposed model. Input is an image sequence with dimensions $(time steps, height, width, channels)$. After the ConvLSTM cell, the sequence's last image is selected with dimensions $(height, width, channels)$ and taken to a fully connected layer, followed by a softmax output layer (ConvLSTM filters: 32).}
+%\label{fig:proposed_model}
+%\end{figure}
 
 \subsection{ConvLSTM-PC}
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.35]{figs/model.eps}
-\caption{Block diagram for the proposed model. Input is an image sequence with dimensions $(time steps, height, width, channels)$. After the ConvLSTM cell, the sequence's last image is selected with dimensions $(height, width, channels)$ and taken to a fully connected layer, followed by a softmax output layer (ConvLSTM filters: 32).}
-\label{fig:proposed_model}
-\end{figure}
 
-ConvLSTM-PC architecture is shown in Figure \ref{fig:proposed_model}. It begins with a ConvLSTM cell, which takes a time sequence of multi-spectral patch images as input. After this cell, the sequence's last image is selected and flattened. The resulting vector is taken to a fully connected layer by a softmax layer which produces the final class probabilities. 
+\begin{table}[]
+\centering
+\caption{My caption}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & \multicolumn{2}{c|}{\textbf{Campo Verde}} & \multicolumn{2}{c|}{\textbf{Hanover}} \\ \hline
+\textbf{Layer} & \textbf{Size-Out} & \textbf{Kernel} & \textbf{Size-Out} & \textbf{Kernel} \\ \hline
+\textbf{ConvLSTM} & $15 \times 15\times 16$ & $3\times3/1$ & $5\times 5\times 16$ & $3\times 3/1$ \\ \hline
+\textbf{Max. Pool} & $7 \times 7 \times 16$ & $2\times2/2$ & Not applied & - \\ \hline
+\textbf{Dense} & 100 & - & 300 & - \\ \hline
+\textbf{Softmax} & 9 or 10 & - & 8 & - \\ \hline
+\end{tabular}
+\end{table}
+
+ConvLSTM-PC architecture is shown in Figure \ref{fig:proposed_model}. It begins with a ConvLSTM cell, which takes a time sequence of multi-spectral patch images as input. After this cell, the sequence's last image is selected and flattened. The resulting vector is taken to a fully connected layer by a softmax layer which produces the final class probabilities. As with the previous model, resulting classification is assigned to the patch's central pixel and inference is achieved by applying the network to overlapping patches.
 
 \subsection{Fully Convolutional Network (FCN-PL)}
 
 The FCN-PL architecture takes an image as input and produces an output of the same size with class probabilities for every pixel, using a series of down-sampling followed by up-sampling layers \cite{long2015fully}. In this work, the DenseNet architecture from \cite{iandola2014densenet} was used. This architecture uses skip connections to improve the flow of information and gradients throughout the network, allowing the use of larger models.
 
 \section{Experiments}
+
+\begin{figure}[t!]
+\label{fig:campoverde}
+\centering
+\includegraphics[scale=0.22]{figs2/CampoVerde.pdf}
+\caption{Campo Verde study area.}
+\label{fig:labels}
+\end{figure}
+
+\begin{figure}[t!]
+\label{fig:hanover}
+\centering
+\includegraphics[scale=0.18]{figs2/Hanover.pdf}
+\caption{Hanover study area.}
+\label{fig:labels}
+\end{figure}
 \subsection{Datasets}
 
-Agricultural behaviour can greatly vary in different regions. Because of this, two areas with very different weather conditions were studied: First one is located in the surroundings of Hanover city, in Germany (Figure \cite{}). It has an extension of 1728 km2 and consists of a sequence of 24 pre-processed, dual-polarized Sentinel-1 SAR images taken from from October 2014 to October 2016 in a monthly basis. Because this is a temperate region, each parcel belongs to the same class throughout the entire year. Most common crop types are Sugarcane, Soybean and Maize \cite{bargiel2017new}.
+Agricultural behaviour can greatly vary in different regions. Because of this, two areas with very different weather conditions were studied: First one is located in the surroundings of Hanover city, in Germany (Figure \ref{fig:hanover}). It has an extension of 1728 km2 and consists of a sequence of 24 pre-processed, dual-polarized Sentinel-1 SAR images taken from from October 2014 to October 2016 in a monthly basis. Because this is a temperate region, each parcel belongs to the same class throughout the entire year. Most common crop types are Sugarcane, Soybean and Maize \cite{bargiel2017new}.
 
-Second area is located in Campo Verde municipality from the state of Mato Grosso, Brazil with an extension of 4782km2 (Figure \ref{}). It consists of a sequence of 14 pre-processed, dual-polarized SAR images taken from Sentinel-1 between October 2015 and July 2016. Main classes are soybean, maize and cotton. This area is located in a tropical environment, making its multi-temporal behavior highly dynamic and challenging \cite{sanches2018campo}.
+Second area is located in Campo Verde municipality from the state of Mato Grosso, Brazil with an extension of 4782km2 (Figure \ref{fig:campoverde}). It consists of a sequence of 14 pre-processed, dual-polarized SAR images taken from Sentinel-1 between October 2015 and July 2016. Main classes are soybean, maize and cotton. This area is located in a tropical environment, making its multi-temporal behavior highly dynamic and challenging \cite{sanches2018campo}.
 
 
 
-\begin{figure}[h]
+\begin{figure}[t!]
 \centering
 \includegraphics[scale=0.22]{figs2/ClassOccurrencesUnique.eps}
 \caption{Class occurences from Campo Verde dataset. Two main sub-sequences were identified: First one mainly contains Soybean, while the second one contains Maize and Cotton.}
@@ -451,13 +502,53 @@ Data balancing was performed with random replication from the smaller classes. T
 \section{Results}
 
 
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+%\begin{table}[]
+%\centering
+%\begin{tabular}{|l|c|c|c|c|}
+%\hline
+%\multicolumn{1}{|c|}{\multirow{2}{*}{}} & \multicolumn{2}{c|}{\textbf{Sequence 1}} & %\multicolumn{2}{c|}{\textbf{Sequence 2}} \\ \cline{2-5} 
+%\multicolumn{1}{|c|}{}                  & \textbf{OA}         & \textbf{AA}        & \textbf{OA}   %      & \textbf{AA}        \\ \hline
+%\textbf{FCN-PL}                         & \textbf{81.8}                & \textbf{74.7}             %  & 70                  & 65.8               \\ \hline
+%\textbf{ConvLSTM-PC}                    & 80.4                & 70                 & \textbf{71}   %               & \textbf{66.6}               \\ \hline
+%\textbf{LSTM-PC}                        & 80                  & 69                 & 70            %      & 63                 \\ \hline
+%\textbf{RF}                             & 74.3                & 60.1               & 67.7          %      & 62.5               \\ \hline
+%\end{tabular}
+%\end{table}
+
+
+
+%\begin{table}[]
+%\centering
+%\begin{tabular}{|c|c|c|}
+%\hline
+%                     & \textbf{OA}   & \textbf{AA}   \\ \hline
+%\textbf{FCN-PL}      & \textbf{89.2} & \textbf{86.4} \\ \hline
+%\textbf{ConvLSTM-PC} & 88.1          & 85.8          \\ \hline
+%\textbf{LSTM-PC}     & 88.4          & 84.5          \\ \hline
+%\textbf{RF}          & 86.6          & 79            \\ \hline
+%\end{tabular}
+%\end{table}
+
+
+\begin{table}[t!]
+\centering
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{\multirow{2}{*}{}} & \multicolumn{2}{c|}{\textbf{Sequence 1}} & \multicolumn{2}{c|}{\textbf{Sequence 2}} & \multicolumn{2}{c|}{\textbf{Hanover}} \\ \cline{2-7} 
+\multicolumn{1}{|c|}{}                  & \textbf{OA}         & \textbf{AA}        & \textbf{OA}        & \textbf{AA}         & \textbf{OA}       & \textbf{AA}       \\ \hline
+\textbf{FCN-PL}                         & \textbf{81.8}       & \textbf{74.7}      & 70                 & 65.8                & \textbf{89.2}     & \textbf{86.4}     \\ \hline
+\textbf{ConvLSTM-PC}                    & 80.4                & 70                 & \textbf{71}        & \textbf{66.6}       & 88.1              & 85.8              \\ \hline
+\textbf{LSTM-PC}                        & 80                  & 69                 & 70                 & 63                  & 88.4              & 84.5              \\ \hline
+\textbf{RF}                             & 74.3                & 60.1               & 67.7               & 62.5                & 86.6              & 79                \\ \hline
+\end{tabular}
+\end{table}
 \section{Conclusions}
 
 
 
-Results show an improvement in all metrics for the implemented ConvLSTM model when compared against the baseline model. Metrics for both models are shown in Table \ref{tab:comparison}. Proposed model had a significant increase in average accuracy, and a slight increase in overall accuracy. The ConvLSTM cell managed to capture the dataset information with far less filters than the ones needed for the basic LSTM cell. On the other hand, the ConvLSTM cell with 16 filters had nearly the same amount of parameters than the BasicLSTM cell with 128 filters.
-
-Convolutional LSTM cells are specially adapted to working with sequences of images, and the ConvLSTM-based model produced higher evaluation metrics than its basic LSTM counterpart. Using as little as 16 filters for the ConvLSTM cell was enough to outperform the baseline model which had 128 filters on the recurrent layer. Thus, an advantage of ConvLSTM models for this type of problem is the reduced amount of filters required to model the data behavior. Finally, as opposed to a basic LSTM cell, using a ConvLSTM cell outputs an image (or sequence of images), allowing to add further architectures on top of this layer such as fully convolutional networks. Future works will be focused in image-to-image architectures using ConvLSTM cells.
+Results show 
 
 
 % conference papers do not normally have an appendix
