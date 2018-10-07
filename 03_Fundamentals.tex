@@ -4,7 +4,7 @@
 
 \subsection{Long Short Term Memory (LSTM)}
 
-Recurrent neural networks (RNN) are a type of neural network designed for processing sequential data. These type of models are state-of-the-art in temporal modeling tasks\cite{ma2017ts}. In particular, LSTM are a special type of RNN that are capable of modeling both long and short term time dependencies. They feature two recurrent states $c_1,...c_t$ and $h_1,...h_t$ to store past information. Besides, they use an information gate to control how much information is added to the output state in each step and a forget gate to eliminate unuseful information. Input for this model is a sequence of vector data $x_1,...x_t$, and output is the $c_1,...c_t$ sequence. Equations for this model are as follows \cite{convlstm}, where "$\circ$" denotes the Hadamard product:
+Recurrent neural networks (RNN) are a type of neural network designed for processing sequential data. These type of models are state-of-the-art in temporal modeling tasks\cite{ma2017ts}. In particular, LSTM are a special type of RNN that are capable of modeling both long and short term time dependencies. They feature two recurrent states $c_1,...c_t$ and $h_1,...h_t$ to store past information. Besides, they use an information gate to control how much information is added to the output state in each step and a forget gate to eliminate unuseful information. Input for this model is a sequence of vector data $x_1,...x_t$, and the $h_1,...h_t$ hidden values can be used as an output. Equations for this model are as follows \cite{convlstm}, where "$\circ$" denotes the Hadamard product:
 \begin{align*}
 & i_t=\sigma (W_{xi}x_t+W_{hi} h_{t-1} + W_{ci}\circ c_{t-1}+b_i) \\
 & f_t=\sigma (W_{xf} x_t+W_{hf} h_{t-1} + W_{cf}\circ c_{t-1}+b_f) \\

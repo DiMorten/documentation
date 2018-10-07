@@ -3,7 +3,16 @@
 \section{Results}
 
 
-Results are shown in Table \ref{tab:results}
+Results are shown in Table \ref{tab:results}. In terms of Overall Accuracy, the FCN-PL model performed the best in both the first and the second sequences from Campo Verde. Because of the high class imbalance present in this dataset, the Average Accuracy could be a better metric
+
+In the first sequence from Campo Verde dataset, best results were achieved with FCN-PL. For the second sequence, FCN-PL was also the best model in terms of OA. Given that this dataset presents a high class imbalance, Average Accuracy could be a more relevant metric. Here, FCN-PL obtained the best AA for sequence 1 while in sequence 2 its value was close to the ConvLSTM-PC network. 
+
+Because of its larger tile sizes, Campo Verde might have better benefited from the spatial understanding that the FCN-PL is able to achieve. On the other hand, the amount of temporal images in Hanover dataset is more than three times larger when compared to Campo Verde. The fact that recurrent networks performed better in this context indicates that their sequence modeling capabilities might be better harnessed with larger time sequences.
+
+Although both recurrent networks presented similar overall accuracy values, the ConvLSTM-based model outperformed its counterpart in terms of average accuracy for all datasets. This might be due to the ConvLSTM inherent abilities to understand spatial context. Furthermore, the fact that minority classes were better represented by ConvLSTM-PC could indicate that this model is more capable of encoding the additional information from the data augmentation process. 
+
+Both LSTM-PC and ConvLSTM-PC outperformed the results obtained in \ref{} for Campo Verde. This might be the result of certain architecture modifications such as a larger input image size and an extra intermediate layer. Finally, all the deep models obtained a better performance than the basic image stacking approach. 
+
 \begin{table}[h!]
 \centering
 \caption{Results for Campo Verde and Hanover datasets. Metrics are Overall Accuracy (OA) and Average Accuracy (AA)}

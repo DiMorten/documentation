@@ -4,9 +4,9 @@
 \section{Methods}
 
 
-This section describes the models evaluated during this work. Image stacking has been widely used for multitemporal crop recognition \cite{schneider2012monitoring,schneider2008compact}. Because of this, it was used as the baseline model with a Random Forest classifier. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
+This section describes the models evaluated during this work. Image stacking has been widely used for multitemporal crop recognition \cite{schneider2012monitoring,schneider2008compact}. Because of this, it was used as the baseline model. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
 
-\subsection{Image Stacking with Random Forest}
+\subsection{Image Stacking}
 
 This method consists of computing hand-crafted features for the images for each time step and stacking them all together, obtaining a feature vector from each pixel location. The resulting representation is then used to train a Random Forest classifier that assigns the class label probabilities for a given pixel. Particularly the values of correlation, homogeneity, mean and variance from GLCM matrix in four directions (0, 45, 90 and 135 degrees) using 5x5 windows were used as hand-crafted features. 
 \subsection{LSTM-PC}
@@ -16,7 +16,7 @@ This method consists of computing hand-crafted features for the images for each 
 
 \begin{table}[]
 \centering
-\caption{LSTM-PC network architecture. Output sizes are described in $(rows\times cols\times filters)$.}
+\caption{LSTM-PC network architecture. Output sizes are described in number of filters.}
 \label{table:lstm}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -24,7 +24,7 @@ This method consists of computing hand-crafted features for the images for each 
 \textbf{Layer}         & \textbf{Campo Verde}  & \textbf{Hanover}  \\ \hline
 \textbf{LSTM}          & $100$                 & $100$             \\ \hline
 \textbf{F.C.}          & $100$                 & $300$             \\ \hline
-\textbf{Softmax}       & $9$ or $10$           & $8$               \\ \hline
+\textbf{Softmax}       & 9 or 10           & $8$               \\ \hline
 \end{tabular}
 \end{table}
 
