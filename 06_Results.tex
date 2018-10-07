@@ -1,0 +1,21 @@
+%%%% This file includes the results %%%%
+
+\section{Results}
+
+
+Results are shown in Table \ref{tab:results}
+\begin{table}[h!]
+\centering
+\caption{Results for Campo Verde and Hanover datasets. Metrics are Overall Accuracy (OA) and Average Accuracy (AA)}
+\label{tab:results}
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Dataset}}}         & \multicolumn{4}{c|}{\textbf{Campo Verde}}                                           & \multicolumn{2}{c|}{\multirow{2}{*}{\textbf{Hanover}}}              \\ \cline{2-5}
+\multicolumn{1}{|c|}{}                                          & \multicolumn{2}{c|}{\textbf{Sequence 1}} & \multicolumn{2}{c|}{\textbf{Sequence 2}} & \multicolumn{2}{c|}{}                                               \\ \hline
+\multicolumn{1}{|c|}{\textbf{Layer}}                            & \textbf{OA}        & \textbf{AA}         & \textbf{OA}         & \textbf{AA}        & \multicolumn{1}{l|}{\textbf{OA}} & \multicolumn{1}{l|}{\textbf{AA}} \\ \hline
+\textbf{FCN-PL}                                                 & \textbf{81}        & \textbf{75.6}       & \textbf{73.9}       & 69                 & 87.7                             & 85.2                             \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}ConvLSTM-\\ PC\end{tabular}} & 79.                & 72.5                & 71.7                & \textbf{69.4}      & \textbf{91.2}                    & \textbf{87.2}                    \\ \hline
+\textbf{LSTM-PC}                                                & 80.5               & 73.7                & 72                  & 65                 & 89.2                             & 84.4                             \\ \hline
+\textbf{RF(GLCM)}                                               & 72                 & 61.1                & 66.                 & 64.1               & 86.6                             & 79.                              \\ \hline
+\end{tabular}
+\end{table}

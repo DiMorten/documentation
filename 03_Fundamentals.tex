@@ -1,0 +1,25 @@
+
+
+\section{Fundamentals}
+
+\subsection{Long Short Term Memory (LSTM)}
+
+Recurrent neural networks (RNN) are a type of neural network designed for processing sequential data. These type of models are state-of-the-art in temporal modeling tasks\cite{ma2017ts}. In particular, LSTM are a special type of RNN that are capable of modeling both long and short term time dependencies. They feature two recurrent states $c_1,...c_t$ and $h_1,...h_t$ to store past information. Besides, they use an information gate to control how much information is added to the output state in each step and a forget gate to eliminate unuseful information. Input for this model is a sequence of vector data $x_1,...x_t$, and output is the $c_1,...c_t$ sequence. Equations for this model are as follows \cite{convlstm}, where "$\circ$" denotes the Hadamard product:
+\begin{align*}
+& i_t=\sigma (W_{xi}x_t+W_{hi} h_{t-1} + W_{ci}\circ c_{t-1}+b_i) \\
+& f_t=\sigma (W_{xf} x_t+W_{hf} h_{t-1} + W_{cf}\circ c_{t-1}+b_f) \\
+& C_t=f_t\circ C_{t-1}+i_t\circ tanh(W_{xc} x_t+W_{hc} h_{t-1}+b_c) \\
+& o_t=\sigma (W_{xo} x_t+W_{ho} h_{t-1} + W_{co} \circ c_{t}+b_o) \\
+& h_t=o_t\circ tanh(c_t)
+\end{align*}
+
+\subsection{Convolutional Long Short Term Memory (ConvLSTM)}
+
+A major drawback from the original LSTM in handling spatial data is the usage of fully connected layers for its input-to-state and state-to-state transitions, which don't take spatial context into account. A ConvLSTM cell takes the original LSTM cell and replaces the fully connected layers from the forget, information and output gates with convolutions. Input $\mathcal{X}_1,...\mathcal{X}_t$, hidden state $\mathcal{H}_1,...\mathcal{H}_t$ and output $\mathcal{C}_1,...\mathcal{C}_t$ are sequences of images (As opposed to flat vectors from LSTM). The desired amount of filters corresponds to the amount of image bands from $C_t$. Equations for the ConvLSTM cell are as follows \cite{convlstm}, where "$\ast$" denotes the convolution operator and "$\circ$" the Hadamart product:
+\begin{align*}
+& i_t=\sigma (W_{xi} \ast \mathcal{X}_t+W_{hi} \ast \mathcal{H}_{t-1} + W_{ci} \ast C_{t-1}+b_i) \\
+& f_t=\sigma (W_{xf} \ast \mathcal{X}_t+W_{hf} \ast \mathcal{H}_{t-1} + W_{cf} \ast C_{t-1}+b_f) \\
+& C_t=f_t\circ C_{t-1}+i_t\circ tanh(W_{xc} \ast \mathcal{X}_t+W_{hc} \ast \mathcal{H}_{t-1}+b_c) \\
+& o_t=\sigma (W_{xo} \ast \mathcal{X}_t+W_{ho} \ast \mathcal{H}_{t-1} + W_{co} \circ C_{t}+b_o) \\
+& \mathcal{H}_t=o_t\circ tanh(C_t)
+\end{align*}

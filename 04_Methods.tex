@@ -1,0 +1,55 @@
+%%%% This file includes the material and methods %%%%
+
+
+\section{Methods}
+
+
+This section describes the models evaluated during this work. Image stacking has been widely used for multitemporal crop recognition \cite{schneider2012monitoring,schneider2008compact}. Because of this, it was used as the baseline model with a Random Forest classifier. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
+
+\subsection{Image Stacking with Random Forest}
+
+This method consists of computing hand-crafted features for the images for each time step and stacking them all together, obtaining a feature vector from each pixel location. The resulting representation is then used to train a Random Forest classifier that assigns the class label probabilities for a given pixel. Particularly the values of correlation, homogeneity, mean and variance from GLCM matrix in four directions (0, 45, 90 and 135 degrees) using 5x5 windows were used as hand-crafted features. 
+\subsection{LSTM-PC}
+
+
+
+
+\begin{table}[]
+\centering
+\caption{LSTM-PC network architecture. Output sizes are described in $(rows\times cols\times filters)$.}
+\label{table:lstm}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{1}{|l|}{} & \multicolumn{2}{c|}{\textbf{Output Size}} \\ \hline
+\textbf{Layer}         & \textbf{Campo Verde}  & \textbf{Hanover}  \\ \hline
+\textbf{LSTM}          & $100$                 & $100$             \\ \hline
+\textbf{F.C.}          & $100$                 & $300$             \\ \hline
+\textbf{Softmax}       & $9$ or $10$           & $8$               \\ \hline
+\end{tabular}
+\end{table}
+
+The model architecture is shown in Figure \ref{table:lstm}. It receives a sequence of flattened image patches as inputs. First, the sequence is passed through a basic LSTM cell. Then the feature vector from the cell's last output is gathered and passed to a fully connected layer, followed by a softmax layer producing the output class probabilities. At inference time, the model is applied to overlapping patches and the predicted class is assigned to the central pixel from the input patch. Then a mosaic is constructed by spatially concatenating the classification results.
+
+
+\subsection{ConvLSTM-PC}
+
+\begin{table}[]
+\centering
+\caption{ConvLSTM-PC network architecture. Output sizes are described in $(time\times rows\times cols\times filters)$ or in $(rows\times cols\times filters)$. }
+\label{table:convlstm}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{1}{|l|}{} & \multicolumn{2}{c|}{\textbf{Output Size}}     \\ \hline
+\textbf{Layer}         & \textbf{Campo Verde}   & \textbf{Hanover}     \\ \hline
+\textbf{ConvLSTM}      & $15\times 15\times 16$ & $5\times 5\times 16$ \\ \hline
+\textbf{Max. Pool}     & $7\times 7\times 16$   & -                    \\ \hline
+\textbf{F.C.}          & $100$                  & $300$                \\ \hline
+\textbf{Softmax}       & $9 or 10$              & $8$                  \\ \hline
+\end{tabular}
+\end{table}
+
+ConvLSTM-PC architecture is shown in Table \ref{table:convlstm}. It begins with a ConvLSTM cell, which takes a time sequence of multi-spectral patch images as input. After this cell, the sequence's last image is selected and flattened. The resulting vector is taken to a fully connected layer by a softmax layer which produces the final class probabilities. As with the previous model, resulting classification is assigned to the patch's central pixel and inference is achieved by applying the network to overlapping patches.
+
+\subsection{Fully Convolutional Network (FCN-PL)}
+
+The FCN-PL architecture takes an image as input and produces an output of the same size with class probabilities for every pixel, using a series of down-sampling followed by up-sampling layers \cite{long2015fully}. In this work, the DenseNet architecture from \cite{iandola2014densenet} was used. This architecture uses skip connections to improve the flow of information and gradients throughout the network, allowing the use of larger models.
