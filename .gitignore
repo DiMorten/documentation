@@ -37,3 +37,7 @@ ehthumbs.db
 Thumbs.db
 
 figs2/
+*.pdf
+*.svg
+*.eps
+*.png

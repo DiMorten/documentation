@@ -3,15 +3,14 @@
 \section{Results}
 
 
-Results are shown in Table \ref{tab:results}. In terms of Overall Accuracy, the FCN-PL model performed the best in both the first and the second sequences from Campo Verde. Because of the high class imbalance present in this dataset, the Average Accuracy could be a better metric
 
-In the first sequence from Campo Verde dataset, best results were achieved with FCN-PL. For the second sequence, FCN-PL was also the best model in terms of OA. Given that this dataset presents a high class imbalance, Average Accuracy could be a more relevant metric. Here, FCN-PL obtained the best AA for sequence 1 while in sequence 2 its value was close to the ConvLSTM-PC network. 
+Results are shown in Table \ref{tab:results}. The baseline model \textit{IS} achieved significantly higher results than the ones from previous works in Campo Verde dataset. This can be explained because a GLCM window size selection was performed. Even so, the deep learning networks outperformed this baseline in terms of OA and AA for all datasets. 
 
-Because of its larger tile sizes, Campo Verde might have better benefited from the spatial understanding that the FCN-PL is able to achieve. On the other hand, the amount of temporal images in Hanover dataset is more than three times larger when compared to Campo Verde. The fact that recurrent networks performed better in this context indicates that their sequence modeling capabilities might be better harnessed with larger time sequences.
+In general, the FCN-PL architecture performed the best for Campo Verde dataset. Because of its larger tile sizes, this study area might have better benefited from the spatial modeling that the FCN-PL is able to perform. On the other hand, the amount of temporal images in Hanover dataset is more than three times larger when compared to Campo Verde. The fact that the ConvLSTM performed better in this context indicates that its sequence modeling capabilities might be better harnessed with larger time sequences.
 
-Although both recurrent networks presented similar overall accuracy values, the ConvLSTM-based model outperformed its counterpart in terms of average accuracy for all datasets. This might be due to the ConvLSTM inherent abilities to understand spatial context. Furthermore, the fact that minority classes were better represented by ConvLSTM-PC could indicate that this model is more capable of encoding the additional information from the data augmentation process. 
+Although both recurrent networks presented similar overall accuracy values, the ConvLSTM-based model outperformed its counterpart in terms of average accuracy for all datasets. The fact that minority classes were better represented by ConvLSTM-PC could indicate that this model is more capable of encoding the additional information from the image data augmentation process.   \vspace{0.5cm}
 
-Both LSTM-PC and ConvLSTM-PC outperformed the results obtained in \ref{} for Campo Verde. This might be the result of certain architecture modifications such as a larger input image size and an extra intermediate layer. Finally, all the deep models obtained a better performance than the basic image stacking approach. 
+%Both LSTM-PC and ConvLSTM-PC outperformed the results obtained in \ref{} for Campo Verde. This might be the result of certain architecture modifications such as a larger input image size and an extra intermediate layer. Finally, all the deep models obtained a better performance than the basic image stacking approach. 
 
 \begin{table}[h!]
 \centering
@@ -21,10 +20,10 @@ Both LSTM-PC and ConvLSTM-PC outperformed the results obtained in \ref{} for Cam
 \hline
 \multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Dataset}}}         & \multicolumn{4}{c|}{\textbf{Campo Verde}}                                           & \multicolumn{2}{c|}{\multirow{2}{*}{\textbf{Hanover}}}              \\ \cline{2-5}
 \multicolumn{1}{|c|}{}                                          & \multicolumn{2}{c|}{\textbf{Sequence 1}} & \multicolumn{2}{c|}{\textbf{Sequence 2}} & \multicolumn{2}{c|}{}                                               \\ \hline
-\multicolumn{1}{|c|}{\textbf{Layer}}                            & \textbf{OA}        & \textbf{AA}         & \textbf{OA}         & \textbf{AA}        & \multicolumn{1}{l|}{\textbf{OA}} & \multicolumn{1}{l|}{\textbf{AA}} \\ \hline
-\textbf{FCN-PL}                                                 & \textbf{81}        & \textbf{75.6}       & \textbf{73.9}       & 69                 & 87.7                             & 85.2                             \\ \hline
-\textbf{\begin{tabular}[c]{@{}l@{}}ConvLSTM-\\ PC\end{tabular}} & 79.                & 72.5                & 71.7                & \textbf{69.4}      & \textbf{91.2}                    & \textbf{87.2}                    \\ \hline
-\textbf{LSTM-PC}                                                & 80.5               & 73.7                & 72                  & 65                 & 89.2                             & 84.4                             \\ \hline
-\textbf{RF(GLCM)}                                               & 72                 & 61.1                & 66.                 & 64.1               & 86.6                             & 79.                              \\ \hline
+\multicolumn{1}{|c|}{\textbf{Layer}}                            & \textbf{OA}        & \textbf{AA}         & \textbf{OA}          & \textbf{AA}       & \multicolumn{1}{l|}{\textbf{OA}} & \multicolumn{1}{l|}{\textbf{AA}} \\ \hline
+\textbf{FCN-PL}                                                 & \textbf{81}        & 75.6                & \textbf{73.9}        & \textbf{69}       & 91.9                             & 88.5                             \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}ConvLSTM-\\ PC\end{tabular}} & 80.5               & \textbf{75.9}       & 70.4                 & 66.4              & \textbf{93.7}                    & \textbf{90.2}                    \\ \hline
+\textbf{LSTM-PC}                                                & 80.1               & 74                  & 72                   & 65                & 91.9                             & 85.9                             \\ \hline
+\textbf{IS(GLCM)}                                               & 79.1               & 68.1                & 71.1                 & 65.9              & 86.1                             & 77.4                             \\ \hline
 \end{tabular}
 \end{table}
