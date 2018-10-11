@@ -2,19 +2,20 @@
 
 \section{Results}
 
+Results are shown in Table \ref{tab:results}, where the values in bold represent the highest accuracies obtained for each dataset in terms of both Overall Accuracy (OA) and Average class Accuracy (AA). The baseline model IS achieved significantly higher results than the implementation from \cite{castro2017comparative} in Campo Verde dataset. This can be explained because a different window size selection was performed. Even with these improvements, the deep learning networks outperformed the baseline in both metrics for all datasets. 
 
+In general, the FCN-PL architecture performed better for Campo Verde dataset, while the ConvLSTM-PC attained the highest scores for Hanover. Because of its larger tile sizes, Campo Verde might have being more benefited from the spatial modeling that the FCN-PL is able to perform. On the other hand, the amount of temporal images in Hanover dataset is more than three times larger than Campo Verde. The fact that the ConvLSTM performed better in this context may indicate that its sequence modeling capabilities could be better harnessed with larger time sequences.
 
-Results are shown in Table \ref{tab:results}. The baseline model \textit{IS} achieved significantly higher results than the ones from previous works in Campo Verde dataset. This can be explained because a GLCM window size selection was performed. Even so, the deep learning networks outperformed this baseline in terms of OA and AA for all datasets. 
+Although both recurrent networks presented similar OA values, the ConvLSTM-based model outperformed its counterpart in terms of AA for all datasets. The fact that minority classes were better represented by ConvLSTM-PC could indicate that this model is more capable of encoding the additional information from the image data augmentation process.
 
-In general, the FCN-PL architecture performed the best for Campo Verde dataset. Because of its larger tile sizes, this study area might have better benefited from the spatial modeling that the FCN-PL is able to perform. On the other hand, the amount of temporal images in Hanover dataset is more than three times larger when compared to Campo Verde. The fact that the ConvLSTM performed better in this context indicates that its sequence modeling capabilities might be better harnessed with larger time sequences.
+Finally, both LSTM-PC and ConvLSTM-PC outperformed the results obtained with RNNs in \cite{rnnjose} for Campo Verde. This might also be the result of architecture modifications such as a larger input image size and an additional FC layer. 
+%Important
 
-Although both recurrent networks presented similar overall accuracy values, the ConvLSTM-based model outperformed its counterpart in terms of average accuracy for all datasets. The fact that minority classes were better represented by ConvLSTM-PC could indicate that this model is more capable of encoding the additional information from the image data augmentation process.   \vspace{0.5cm}
-
-%Both LSTM-PC and ConvLSTM-PC outperformed the results obtained in \ref{} for Campo Verde. This might be the result of certain architecture modifications such as a larger input image size and an extra intermediate layer. Finally, all the deep models obtained a better performance than the basic image stacking approach. 
+\vspace{0.5cm}
 
 \begin{table}[h!]
 \centering
-\caption{Results for Campo Verde and Hanover datasets. Metrics are Overall Accuracy (OA) and Average Accuracy (AA)}
+\caption{Results obtained from Campo Verde and Hanover datasets in terms of Overall Accuracy (OA) and Average class Accuracy (AA)}
 \label{tab:results}
 \begin{tabular}{|l|c|c|c|c|c|c|}
 \hline
@@ -23,7 +24,7 @@ Although both recurrent networks presented similar overall accuracy values, the 
 \multicolumn{1}{|c|}{\textbf{Layer}}                            & \textbf{OA}        & \textbf{AA}         & \textbf{OA}          & \textbf{AA}       & \multicolumn{1}{l|}{\textbf{OA}} & \multicolumn{1}{l|}{\textbf{AA}} \\ \hline
 \textbf{FCN-PL}                                                 & \textbf{81}        & 75.6                & \textbf{73.9}        & \textbf{69}       & 91.9                             & 88.5                             \\ \hline
 \textbf{\begin{tabular}[c]{@{}l@{}}ConvLSTM-\\ PC\end{tabular}} & 80.5               & \textbf{75.9}       & 70.4                 & 66.4              & \textbf{93.7}                    & \textbf{90.2}                    \\ \hline
-\textbf{LSTM-PC}                                                & 80.1               & 74                  & 72                   & 65                & 91.9                             & 85.9                             \\ \hline
+\textbf{LSTM-PC}                                                & 80.1               & 74                  & 72.2                   & 69.2                & 91.9                             & 85.9                             \\ \hline
 \textbf{IS(GLCM)}                                               & 79.1               & 68.1                & 71.1                 & 65.9              & 86.1                             & 77.4                             \\ \hline
 \end{tabular}
 \end{table}

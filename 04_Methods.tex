@@ -1,42 +1,43 @@
 %%%% This file includes the material and methods %%%%
 \section{Methods}
 
-This section describes the models evaluated during this work. Image stacking has been widely used for multitemporal crop recognition \cite{schneider2012monitoring,schneider2008compact}. Because of this, it was used as the baseline model. Two recurrent network architectures were tested: \textit{LSTM-PC} and \textit{ConvLSTM-PC}. Finally, a Fully Convolutional Network for full patch labeling (\textit{FCN-PL}) was used.
+This section describes the proposed methods for crop recognition, based on LSTM and FCN as well as the traditional image stacking \cite{schneider2012monitoring,schneider2008compact} approach for multitemporal classification, which was used as a baseline.
 
-\subsection{Image Stacking}
+\subsection{Image stacking (IS)}
 
-This method consists of computing hand-crafted features for the images for each time step and stacking them all together, obtaining a feature vector from each pixel location. The resulting representation is then used to train a Random Forest classifier that assigns the class label probabilities for a given pixel. Particularly the values of correlation, homogeneity, mean and variance from GLCM matrix in four directions (0, 45, 90 and 135 degrees) were used as hand-crafted features. 
-\subsection{LSTM-PC}
+This method consists of computing hand-crafted features for each image in the multitemporal sequence and stacking them all together, obtaining a feature vector from each pixel location. The resulting representation is then used to train a classification algorithm that assigns a class label for a given pixel. 
 
-Following \cite{rnnjose}, an LSTM-based architecture for patch classification was designed (LSTM-PC). It was found that using neighbouring information from the original bands was slighly more useful than taking the GLCM pixel features as input. Thus, input for this network is a sequence of flattened patches from the original images. First, the sequence is passed through a basic LSTM cell. Then the feature vector from the cell's last output is gathered and passed to fully connected (F.C.) and softmax layers. This architecture is shown in Table \ref{table:lstm}. At inference time, the predicted class is assigned to the input's central pixel and the inferred image is constructed by spatially concatenating the network results from overlapping patches. \vspace{0.5cm}
+\subsection{LSTM for patch classification (LSTM-PC)}
 
+Following \cite{rnnjose}, an LSTM-based architecture for patch classification was designed (LSTM-PC). We chose to work with the original bands, because it achieved slightly better results than using the GLCM attributes in preliminary experiments. Patches of $(time, w, w, channels)$ size were extracted from the original image and flattened into a sequence of feature vectors with dimensions $(time, w*w*channels)$. 
+
+At first, the sequence is passed through a basic LSTM cell. Then, the cell's last output is gathered and passed to a FC layer. Finally, a softmax layer produces the output class probabilities. In each case, the predicted class is assigned to the input's central pixel and the inferred image is constructed by spatially concatenating the classification results. \vspace{0.5cm}
+% This architecture is shown in Table \ref{table:lstm}.
 \begin{table}[h!]
 \centering
-\caption{LSTM-PC network architecture. Output sizes are described in number of filters.}
+\caption{LSTM-PC network architecture. Output sizes are described in number of filters. In Campo Verde, class number is specific to each sequence}
 \label{table:lstm}
 \begin{tabular}{|c|c|c|}
 \hline
 \multicolumn{1}{|l|}{} & \multicolumn{2}{c|}{\textbf{Output Size}} \\ \hline
 \textbf{Layer} & \textbf{Campo Verde} & \textbf{Hanover} \\ \hline
 \textbf{LSTM} & $100$ & $100$ \\ \hline
-\textbf{F.C.} & $100$ & $300$ \\ \hline
+\textbf{FC} & $100$ & $300$ \\ \hline
 \textbf{Softmax} & $10$ or $9$ & $8$ \\ \hline
 \end{tabular}
 \end{table}
 
-\subsection{ConvLSTM-PC}
+\subsection{ConvLSTM for patch classification (ConvLSTM-PC)}
 
-ConvLSTM-PC architecture is shown in Table \ref{table:convlstm}. It begins with a ConvLSTM cell, which takes a multi-temporal sequence of patches as an input. After this cell, the sequence's last image is selected and flattened. The resulting vector is taken to a F.C. layer followed by a softmax layer which produces the final class probabilities. As with the previous model, resulting classification is assigned to the patch's central pixel and inference is achieved by applying the network to overlapping patches. \vspace{0.5cm}
+Similarly to LSTM-PC, the ConvLSTM cell takes patches extracted from each image in a multi-temporal sequence as input. Input dimensions are $(time, w, w, channels)$, which are passed through a ConvLSTM cell. Then, the sequence's last image is selected and \textit{max. pooling} is applied. The result is flattened and taken to FC and softmax layers. As with the previous model, resulting classification is assigned to the central pixel of each patch.
+\vspace{0.5cm}
 
-\begin{figure*}[t!]
-\centering
-\includegraphics[scale=0.4]{figs2/densenet2.png}
-\caption{FCN-PL architecture. }
-\label{fig:class_distr}
-\end{figure*}
+% ConvLSTM-PC architecture is shown in Table \ref{table:convlstm}.
+
+
 \begin{table}[h!]
 \centering
-\caption{ConvLSTM-PC network architecture. Output sizes are described in $(rows\times cols\times filters)$ or number of filters.}
+\caption{ConvLSTM-PC network architecture. Output sizes are described in $(rows\times cols\times filters)$ or number of filters}
 \label{table:convlstm}
 \begin{tabular}{|c|c|c|}
 \hline
@@ -44,14 +45,16 @@ ConvLSTM-PC architecture is shown in Table \ref{table:convlstm}. It begins with 
 \textbf{Layer}         & \textbf{Campo Verde}   & \textbf{Hanover}     \\ \hline
 \textbf{ConvLSTM}      & $15\times 15\times 16$ & $5\times 5\times 16$ \\ \hline
 \textbf{Max. Pool}     & $7\times 7\times 16$   & -                    \\ \hline
-\textbf{F.C.}          & $100$                  & $300$                \\ \hline
+\textbf{FC}          & $100$                  & $300$                \\ \hline
 \textbf{Softmax}       & $10$ or $9$              & $8$                  \\ \hline
 \end{tabular}
 \end{table}
 
 
 
-\subsection{Fully Convolutional Network (FCN-PL)}
-Input is a multi-temporal sequence of images is stacked channel-wise and used as input for FCN-PL. In this work, the Fully Convolutional DenseNet architecture from \cite{jegou2017one} was implemented. Upsampling \textit{(Transition Up; TU)} and down-sampling (\textit{Transition Down; TD)}) transitions are performed with \textit{transpose convolution} and \textit{average pooling} operations respectively. Output is an image with the same spatial dimensions from input containing all the pixel-wise class predictions. At inference, non-overlapping patches from the desired region are passed through the FCN-PL network which outputs are then spatially concatenated to form the final mosaic.
+\subsection{FCN for patch labeling (FCN-PL)}
+
+The input for the FCN-PL is a stack of all images in a multi-temporal sequence with shape as $(w, w, channels*time steps)$. The fully convolutional DenseNet architecture was used. The network is called full patch labeling as the output of the network is the set of labels of the whole patch and not only the central pixel. At inference, outputs are spatially concatenated to form the final image mosaic.
+
  
 %and are implemented with \textit{average pooling} and \textit{transpose convolution} operations respectively.

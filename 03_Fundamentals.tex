@@ -2,22 +2,36 @@
 
 \section{Fundamentals}
 
+This section addresses the main concepts of LSTM, ConvLSTM and FCN models. For a better comprehension of deep learning networks including the basics of CNNs and RNNs, please refer to \cite{Goodfellow-et-al-2016}.
+
+\subsection{Long short term memory (LSTM)}
+
+Recurrent neural networks (RNN) are a type of neural network designed for processing sequential data. These type of models are state-of-the-art in temporal modeling tasks\cite{ma2017ts}. In particular, LSTM are a special type of RNN that are capable of modeling both long and short term time dependencies. The main improvement against traditional RNNs is an additional hidden state $C_t$ which acts as a memory cell that can be accessed, written and cleared by trainable gates (See Figure \ref{fig:lstm}).  Specifically, the model uses an information gate $i_t$ to select which information is added to the cell; a forget gate $f_t$ to discard useless previous knowledge and an output gate $o_t$ to produce the final result. 
+
+\subsection{Convolutional long short term memory (ConvLSTM)}
+
+LSTM's major drawback in handling spatial data is the usage of fully connected layers for its input-to-state and state-to-state transitions, which do not take spatial context into account. To overcome this problem, a ConvLSTM cell takes the original LSTM and replaces the fully connected layers from the forget, information and output gates with convolutional layers.Inputs $\textbf{x}_1,...\textbf{x}_t$, hidden states $\textbf{h}_1,...\textbf{h}_t$ and cell outputs $\textbf{C}_1,...\textbf{C}_t$ from Figure \ref{fig:lstm} are 3D tensors with $(rows\times cols\times channels)$ dimensions, as opposed to feature vectors from LSTM\cite{xingjian2015convolutional}.
+
+
 \begin{figure}[t!]
 \centering
 \includegraphics[scale=0.5]{figs2/lstm3.png}
-\caption{LSTM structure diagram.}
+\caption{LSTM structure diagram (Taken from \cite{rnnjose})}
 \label{fig:lstm}
 \end{figure}
-\subsection{Long Short Term Memory (LSTM)}
 
-Recurrent neural networks (RNN) are a type of neural network designed for processing sequential data. These type of models are state-of-the-art in temporal modeling tasks\cite{ma2017ts}. In particular, LSTM are a special type of RNN that are capable of modeling both long and short term time dependencies. Their main improvement is an additional hidden state $C_t$ which acts as a memory cell that can be accessed, written and cleared by several self-parametrized, trainable gates. Specifically, the model uses an information gate $i_t$ to select which information is added to the cell; a forget gate $f_t$ to discard unuseful previous knowledge and an output gate $o_t$ to produce the final result. Architecture for this model is presented in Figure \ref{fig:lstm}.
-\subsection{Convolutional Long Short Term Memory (ConvLSTM)}
+\subsection{Fully convolutional network (FCN)}
 
-A major drawback from the LSTM in handling spatial data is the usage of fully connected layers for its input-to-state and state-to-state transitions, which don't take spatial context into account. To overcome this problem, a ConvLSTM cell takes the original LSTM and replaces the fully connected layers from the forget, information and output gates with convolutions. Inputs $\textbf{x}_1,...\textbf{x}_t$, hidden states $\textbf{h}_1,...\textbf{h}_t$ and cell outputs $\textbf{C}_1,...\textbf{C}_t$ are 3D tensors (Multi-channel images) \cite{xingjian2015convolutional}.
+Typical CNNs contain fully connected (FC) layers that don't consider the spatial information, producing non-spatial outputs. FCN removes the final classification layer from the CNN and converts all the fully connected layers to convolutional ones. This way, the final output become a classification map with spatial dimensions. 
 
-\subsection{Fully Convolutional Network (FCN)}
+A fully convolutional DenseNet \cite{jegou2017one} implements a downsampling path which extracts coarse semantic features, followed by an upsampling path responsible for recovering the input spatial resolution in the final output (Figure \ref{fig:densenet}). In this architecture, Dense Blocks (\textit{DB})  are  a  sequence  of  convolutional  layers  with multiple bypassing connections among them. Transition Down (\textit{TD}) blocks are composed of a convolution and a spatial downsampling operation, while Transition Up (\textit{TU}) blocks contain a convolutional layer and an upsampling operation. 
 
-Typical CNNs contain fully connected (F.C.) layers that don't consider the spatial information, producing non-spatial outputs. The Fully Convolutional Network (FCN) removes the final classifier layer from the CNN and converts all the fully connected layers to convolutions. This way, the final output is a classification map with semantic meaning. Typical segmentation architecture is composed of a downsampling path which extracts coarse semantic features, followed by an upsampling path responsible for recovering the input resolution for the final output. 
+\begin{figure*}[t!]
+\centering
+\includegraphics[scale=0.4]{figs2/densenet.pdf}
+\caption{FCN-PL architecture. (Circles represent concatenation)}
+\label{fig:densenet}
+\end{figure*}
 
-Dense Blocks (DB)  are  a  sequence  of  convolutional  layers  with  multiple bypassing connections between them. Up and down-sampling transitions  are  performed  with \textit{transpose convolution} and \textit{average pooling} operations respectively.
 
+%Upsampling (\textit{Transition Up; TU}) and down-sampling (\textit{Transition Down; TD)} transitions  are  performed  with \textit{transpose convolution} and \textit{average pooling} operations respectively.
